@@ -51,7 +51,15 @@ class ShipHero_WebHooks_Model_OrderObserver
 
     private function _orderCreatedUpdated($sale)
     {
-        // error_log('in order created');
+        // Get modules
+        $modules = Mage::getConfig()->getNode('modules')->children();
+        $modulesArray = (array)$modules;
+        if(isset($modulesArray['Innoexts_Warehouse'])) {
+            // Don't Push, we'll poll these orders instead
+            return TRUE;
+        }
+
+        //error_log('in order created');
         $origData = $sale->getOrigData();
         $origDataUpdated = (!empty($origData)) ? $origData['updated_at'] : $sale['updated_at'];
         $incrementId = $sale['increment_id'];
@@ -62,8 +70,12 @@ class ShipHero_WebHooks_Model_OrderObserver
         }
         $order = Mage::getModel('sales/order')->loadByIncrementId($incrementId);
         $billingAddress = $order->getBillingAddress()->getData();
-        $shippingAddress = $order->getShippingAddress()->getData();
-        $items = $order->getAllVisibleItems();
+        $shippingAddress = $billingAddress;
+        if(gettype($order->getShippingAddress()) == 'object'){
+            $shippingAddress = $order->getShippingAddress()->getData();
+        }
+        //$items = $order->getAllVisibleItems();
+        $items = Mage::getResourceModel('sales/order_item_collection')->addFieldToFilter('order_id',array('eq'=>$order->getID()));
         $payment = $order->getPayment()->getMethodInstance()->getCode();
         $remoteIp = (!empty($order['remote_ip'])) ? $order['remote_ip'] : NULL;
         $giftMessage = Mage::getModel('giftmessage/message');
@@ -78,7 +90,7 @@ class ShipHero_WebHooks_Model_OrderObserver
         }
 
         $orderItems = array();
-
+        $supportedProductTypes = array('configurable', 'bundle');
         foreach($items as $item)
         {
             $this->attribute_output = array();
@@ -87,14 +99,23 @@ class ShipHero_WebHooks_Model_OrderObserver
             $productData = $item->getProduct()->getData();
             $options = $item->getProductOptions();
 
-            if($product->getTypeID() == 'configurable')
+            if(in_array($product->getTypeID(), $supportedProductTypes))
             {
                 $productOptions = $item->getData();
-                $simpleProduct = unserialize($productOptions['product_options']);
+                $simpleProduct = array();
+                if(isset($productOptions['product_options']))
+                {
+                    $simpleProduct = unserialize($productOptions['product_options']);
+                }
 
                 // Loop through our options for the ordered item
                 if(!empty($simpleProduct))
                 {
+                    if(empty($simpleProduct['options']))
+                    {
+                        $simpleProduct['options'] = array();
+                    }
+
                     foreach ($simpleProduct['options'] as $key => $itemOption)
                     {
                         // Get product options
@@ -133,6 +154,7 @@ class ShipHero_WebHooks_Model_OrderObserver
 
             $orderItems[] = array(
                 'item_id' => $item['item_id'],
+                'parent_item_id' => $item['parent_item_id'],
                 'sku' => $item['sku'],
                 'qty_ordered' => $item['qty_ordered'],
                 'price' => $item['price'],
@@ -226,7 +248,7 @@ class ShipHero_WebHooks_Model_OrderObserver
         if ($status != 200) 
         {
             // Write a new line to var/log/shiphero-webhook-observers.log
-            $error_msg = "Call to URL $url failed with status $status, response $json_response, curl_error " . curl_error($curl) . ", culr_errno " . curl_errno($curl);
+            $error_msg = "Call to URL $url failed with status $status, response $json_response, curl_error " . curl_error($curl) . ", curl_errno " . curl_errno($curl);
             Mage::log(
                 "OrderObserverError: " . $error_msg,
                 null,
@@ -248,6 +270,7 @@ class ShipHero_WebHooks_Model_OrderObserver
         $p_name = $product['name'];
         foreach ($attributes as $attribute){
             $_attribute = $attribute->getData();
+
             if($_attribute['is_visible_on_front'])
             { 
                 $allAttributecodes[] = $attribute->getAttributeCode();

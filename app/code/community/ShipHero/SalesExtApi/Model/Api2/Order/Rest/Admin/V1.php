@@ -77,6 +77,14 @@ class ShipHero_SalesExtApi_Model_Api2_Order_Rest_Admin_V1 extends Mage_Sales_Mod
         }
 
         if ($ordersData) {
+            $modules = Mage::getConfig()->getNode('modules')->children();
+            $modulesArray = (array)$modules;
+            /**
+             * Retrieve the read connection
+             */
+            $resource = Mage::getSingleton('core/resource');
+            $readConnection = $resource->getConnection('core_read');
+
             foreach ($this->_getAddresses(array_keys($ordersData)) as $orderId => $addresses) {
                 $ordersData[$orderId]['addresses'] = $addresses;
             }
@@ -108,6 +116,13 @@ class ShipHero_SalesExtApi_Model_Api2_Order_Rest_Admin_V1 extends Mage_Sales_Mod
                     $items[$key]['sku'] = $ordersData[$orderId]['temp_item_array'][$item['item_id']]['original_sku'];
                     $items[$key]['custom_options'] = $ordersData[$orderId]['temp_item_array'][$item['item_id']]['options'];
                     $items[$key]['attributes'] = $attribute_output;
+
+                    $stock_id = 1;
+                    if(isset($modulesArray['Innoexts_Warehouse'])) {
+                        $query = 'SELECT stock_id FROM warehouse_flat_order_grid_warehouse WHERE entity_id = ' . (int)$orderId . ' LIMIT 1';
+                        $stock_id = $readConnection->fetchOne($query);
+                    }
+                    $items[$key]['stock_id'] = (int)$stock_id;
 
                 }
                 $ordersData[$orderId]['order_items'] = $items;

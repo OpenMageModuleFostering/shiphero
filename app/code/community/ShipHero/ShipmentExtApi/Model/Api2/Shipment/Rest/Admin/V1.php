@@ -48,7 +48,7 @@ class ShipHero_ShipmentExtApi_Model_Api2_Shipment_Rest_Admin_V1 extends ShipHero
         $orderId = $data['order_id'];
         $order = Mage::getModel('sales/order')->load($orderId);
 
-        if($order['status'] == 'complete') $this->_error("The order is already complete.", Mage_Api2_Model_Server::HTTP_BAD_REQUEST);
+        if($order['status'] == 'complete') $this->_errorMessage("The order is already complete.", Mage_Api2_Model_Server::HTTP_BAD_REQUEST);
 
         /**
          * Provide the Shipment Tracking Number,
@@ -113,7 +113,7 @@ class ShipHero_ShipmentExtApi_Model_Api2_Shipment_Rest_Admin_V1 extends ShipHero
             } catch (Exception $e) {
                 // error_log("Top level error");
                 // error_log($e->getMessage());
-                $this->_error($e->getMessage(), Mage_Api2_Model_Server::HTTP_BAD_REQUEST);
+                $this->_errorMessage($e->getMessage(), Mage_Api2_Model_Server::HTTP_BAD_REQUEST);
             }
         }
 

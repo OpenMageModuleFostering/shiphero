@@ -128,6 +128,8 @@ class ShipHero_WebHooks_Model_ProductObserver
         $name = $this->_getProductName($product);
         $stock_item_id = $stock['item_id'];
         $store_id = (isset($stock['store_id'])) ? $stock['store_id'] : $product['store_id'];
+        $weight = (isset($product['weight'])) ? $product['weight'] : 0;
+        $cost = (isset($product['cost'])) ? $product["cost"] : 0;
 
         // Get Creds
         $creds = $this->_getCredentials();
@@ -137,6 +139,8 @@ class ShipHero_WebHooks_Model_ProductObserver
             "name" => $name,
             "sku" => $product["sku"],
             "price" => $product["price"],
+            "weight" => $weight,
+            "cost" => $cost,
             "status" => $product["status"],
             "quantity" => $stock['qty'],
             "stock_id" => $stock['stock_id'],
@@ -238,9 +242,13 @@ class ShipHero_WebHooks_Model_ProductObserver
                 $attribute_value = $product->getAttributeText($key);
                 if($attribute_value == false)
                 {
-                    $attr = $product->getResource()->getAttribute('design_number');
+                    $attr = $product->getResource()->getAttribute($key);
                     if(!empty($attr))
                         $attribute_value = $attr->getFrontend()->getValue($product);
+
+                    $attr2 = $product->getResource()->getAttribute('design_number');
+                    if(!empty($attr2))
+                        $attribute_value = $attr2->getFrontend()->getValue($product);
                 }
                 $this->attributes[] = array($key => $attribute_value);
             }

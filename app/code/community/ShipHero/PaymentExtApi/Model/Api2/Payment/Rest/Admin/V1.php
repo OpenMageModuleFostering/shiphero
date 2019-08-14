@@ -47,7 +47,7 @@ class ShipHero_PaymentExtApi_Model_Api2_Payment_Rest_Admin_V1 extends ShipHero_P
         $order = Mage::getModel('sales/order')->load($orderId);
 
         // error_log('In Create Invoice');
-        if($order['status'] == 'complete') $this->_error("The order is already complete.", Mage_Api2_Model_Server::HTTP_BAD_REQUEST);
+        if($order['status'] == 'complete') $this->_errorMessage("The order is already complete.", Mage_Api2_Model_Server::HTTP_BAD_REQUEST);
      
         if($order->canInvoice()) {
             // error_log('Can Invoice:');
@@ -63,9 +63,9 @@ class ShipHero_PaymentExtApi_Model_Api2_Payment_Rest_Admin_V1 extends ShipHero_P
                 // error_log('Saved Order');
 
             } catch (Exception $e){
-                // error_log('Can Invoice Errors');
-                // error_log($e->getMessage());
-                $this->_error($e->getMessage(), Mage_Api2_Model_Server::HTTP_BAD_REQUEST);
+                 //error_log('Can Invoice Errors');
+                 //error_log($e->getMessage());
+                $this->_errorMessage($e->getMessage(), Mage_Api2_Model_Server::HTTP_BAD_REQUEST);
             }
         }
 
