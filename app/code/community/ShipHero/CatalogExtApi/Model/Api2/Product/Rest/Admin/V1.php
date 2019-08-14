@@ -169,6 +169,8 @@ class ShipHero_CatalogExtApi_Model_Api2_Product_Rest_Admin_V1 extends Mage_Catal
             $products[$k]['attributes'] = $product_attributes;
             $products[$k]['custom_options'] = $custom_options;
             $products[$k]['catalog_size'] = $total_products;
+            $products[$k]['updated_at'] = $product->getUpdatedAt();
+            $products[$k]['created_at'] = $product->getCreatedAt();
         }
 
         return $products;

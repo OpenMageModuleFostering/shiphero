@@ -8,7 +8,7 @@ $errors = array();
 
 // Check for duplicate Consumer
 $consumerName = 'ShipHero';
-$callbackUrl = 'http://app.shiphero.com/magento/callback';
+$callbackUrl = 'https://auth.shiphero.com/auth/callback';
 
 // Database Read Adapter
 $coreResource = Mage::getSingleton('core/resource');
@@ -37,7 +37,7 @@ if(empty($result)){
         'name'          => $consumerName,
         'key'           => $helper->generateConsumerKey(),
         'secret'        => $helper->generateConsumerSecret(),
-        'callback_url'  => 'http://app.shiphero.com/magento/callback'
+        'callback_url'  => 'https://auth.shiphero.com/auth/callback'
     );
 
     $consumer->addData($data);

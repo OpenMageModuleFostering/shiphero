@@ -32,6 +32,8 @@
                     <components>Components</components>
                     <attribute_set_id>Attribute Set Id</attribute_set_id>
                     <entity_id>Entity Id</entity_id>
+                    <updated_at>Updated At</updated_at>
+                    <created_at>Created At</created_at>
                 </attributes>
                 <routes>
                     <route_entity>

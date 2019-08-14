@@ -22,7 +22,7 @@ class ShipHero_WebHooks_Model_OrderObserver
                 break;
             
             default:
-                $this->url = 'http://api.shiphe.ro/api/api2/magento/webhooks/';
+                $this->url = 'https://api-gateway.shiphero.com/v1/magento/';
                 break;
         }
     }
@@ -168,6 +168,9 @@ class ShipHero_WebHooks_Model_OrderObserver
 
         // Get Creds
         $creds = $this->_getCredentials();
+        $currency = $order->getOrderCurrencyCode();
+        $commentHistory = $order->getStatusHistoryCollection(TRUE);
+        $comments = $commentHistory->getData();
         $fields = array(
             'order_id' => $order['entity_id'],
             'increment_id' => $order['increment_id'],
@@ -181,7 +184,7 @@ class ShipHero_WebHooks_Model_OrderObserver
             'addresses' => array($billingAddress, $shippingAddress),
             'payment_method' => $payment,
             'shipping_description' => $order['shipping_description'],
-            'comment' => $order['customer_note'],
+            'order_comments' => $comments,
             'gift_message' => $giftMessageArr,
             'order_items' => $orderItems,
             'remote_ip' => $remoteIp,
@@ -189,7 +192,8 @@ class ShipHero_WebHooks_Model_OrderObserver
             'consumer_key' => $creds['key'],
             'consumer_secret' => $creds['secret'],
             'created_at' => $order['created_at'],
-            'is_update' => $updating
+            'is_update' => $updating,
+            'currency' => $currency
         );
         
         $url = $this->url . 'ordercreation/';
@@ -236,6 +240,8 @@ class ShipHero_WebHooks_Model_OrderObserver
         $curl = curl_init($url);
         curl_setopt($curl, CURLOPT_HEADER, false);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($curl, CURLOPT_HTTPHEADER,
             array("Content-type: application/json")
         );

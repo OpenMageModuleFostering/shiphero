@@ -73,8 +73,13 @@ class ShipHero_ShipmentExtApi_Model_Api2_Shipment_Rest_Admin_V1 extends ShipHero
                  * These variables can be provided custom-value, but it is always
                  * suggested to use Order values
                  */
-                $originalCarrierCode = strtolower($order->getShippingCarrier()->getCarrierCode());
-                $originalCarrierTitle = $order->getShippingCarrier()->getConfigData('title');
+                $originalCarrierCode = 'custom';
+                $originalCarrierTitle = 'Custom';
+                $carrier = $order->getShippingCarrier();
+                if(!empty($carrier)) {
+                    $originalCarrierCode = strtolower($carrier->getCarrierCode());
+                    $originalCarrierTitle = $carrier->getConfigData('title');
+                }
                 $shipmentCarrierCode = $data['shipping_carrier'];
                 $shipmentCarrierTitle = $data['shipping_method'];
 
