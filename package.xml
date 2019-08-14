@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<package>
+    <name>ShipHero</name>
+    <version>1.0.0.18</version>
+    <stability>beta</stability>
+    <license>GNU General Public License (GPL)</license>
+    <channel>community</channel>
+    <extends/>
+    <summary>Beautiful and powerful warehouse management system using iPads and iPods to ship orders and manage inventory.</summary>
+    <description>&lt;img src="http://shiphero.wpengine.com/wp-content/uploads/2014/01/packer-in-action2.jpg" /&gt;&#xD;
+&lt;h2&gt;Maintain 100% Accurate Inventory&lt;/h2&gt;&#xD;
+&lt;p&gt;ShipHero accurately maintains your inventory at all time. You will know in real time what&#x2019;s on your shelves and allowing you to count or cycle count your warehouse, without stopping shipping.&lt;/p&gt;&#xD;
+&#xD;
+&lt;h2&gt;Know Where Every Order Is At All Times&lt;/h2&gt;&#xD;
+You can see the status of the order in real time and the history of the order in detail including who picked the order and if any items were missed from the order.&#xD;
+&#xD;
+&lt;h2&gt;Ship Effortlessly&lt;/h2&gt;&#xD;
+&lt;p&gt;ShipHero is the easiest way to ship orders, there are no more paper pick tickets. You see a list of orders, with the pictures of the items and you ship what you see on the screen. Ship via UPS, USPS via Endicia, FedEx and/or DHL &lt;/p&gt;&#xD;
+&#xD;
+&lt;h2&gt;Use the Cheapest Carrier&lt;/h2&gt;&#xD;
+&lt;p&gt;For every shipping method in your store, you can choose a specific shipping method, say UPS Ground or you can choose a delivery target, say 2 Day Delivery. If you choose a target like 2 Day Delivery, we will seamlessly compare all the available shipping methods that you have enabled including USPS flat and regional rate boxes if you have them and we will generate and print the cheapest label that will get there in time, all seamlessly.. &#xD;
+ &lt;/p&gt;&#xD;
+&#xD;
+&#xD;
+&lt;h2&gt;FAQ&lt;/h2&gt;&#xD;
+&lt;h2&gt;What do I need to use ShipHero&lt;/h2&gt;&#xD;
+&lt;p&gt;The courage to try something new! Oh, you mean hardware?&lt;li&gt;One iPod Touch or iPhone per packer.&lt;/li&gt;&lt;li&gt;The ShipHero app, which is free.  &lt;a href="https://itunes.apple.com/us/app/id726640178?mt=8"&gt;Download  from iTunes.&lt;/a&gt; or search for &lt;b&gt;ShipHero&lt;/b&gt; in iTunes.&lt;/li&gt;&#xD;
+&lt;li&gt;A label printer and invoice printer. You can use just one standard printer for both labels and invoices if you want.&lt;/li&gt;&#xD;
+&lt;h2&gt;How long does set up take?&lt;/h2&gt;&#xD;
+&lt;p /&gt;To set up ShipHero and start shipping your first order takes about 20 minutes. Unless you don't have an iPhone or iPod touch, then it depends on the location of the nearest Apple store.&lt;/p&gt;&#xD;
+&lt;h2&gt;Can I also include my non-Magento orders?&lt;/h2&gt;&#xD;
+&lt;p&gt;ShipHero works with Shopify, eBay and Amazon as well, managing your inventory across channels and handling the shipping for all your stores in one place.&#xD;
+&lt;h2&gt;How much does ShipHero cost?&lt;/h2&gt;&#xD;
+&lt;p /&gt;$99 per month per user. For the first 14 days ShipHero is totally free, you don't even have to enter your credit card&lt;/p&gt;&#xD;
+&lt;h2&gt;I have a physical store or multiple locations, can you help me?&lt;/h2&gt;&#xD;
+&lt;p&gt;Yes, omni-channel and multiple location is a big part of what we do.&lt;/p&gt;&#xD;
+&lt;h2&gt;Do I need windows?&lt;/h2&gt;&#xD;
+&lt;p&gt;Nope, we work with Windows and Macs, OSX&lt;/p&gt;&#xD;
+&lt;h2&gt;Can I ask you some questions about my specific needs?&lt;/h2&gt;&#xD;
+&lt;p&gt;Please do! Contact us at 1-(877) 671-6011 or &lt;a href="mailto:hello@shiphero.com"&gt;hello@shiphero.com&lt;/a&gt;&lt;/p&gt;&#xD;
+&#xD;
+&lt;p /&gt;Want to know more about ShipHero? &lt;a href="http://www.ShipHero.com"&gt;Watch video of ShipHero in action, and learn about the full set of features.&lt;/a&gt;</description>
+    <notes>- Fixed table prefixes for webhooks</notes>
+    <authors><author><name>Fareed Hosein</name><user>shipherollc</user><email>roger@shiphero.com</email></author></authors>
+    <date>2015-02-17</date>
+    <time>22:36:41</time>
+    <contents><target name="magecommunity"><dir name="ShipHero"><dir name="CatalogExtApi"><dir name="Model"><dir name="Api2"><dir name="Product"><dir name="Rest"><dir name="Admin"><file name="V1.php" hash="fa124c3cf7655d6c9efc8172ecfdb8b4"/></dir><file name=".DS_Store" hash="82133767cb30f899e06a57a6c0215a3d"/></dir></dir></dir></dir><dir name="etc"><file name="api2.xml" hash="4bfa96037c915b8da87b87cd48f8c51b"/><file name="config.xml" hash="75fca57d73d1909bfb92a0b4116c3b24"/></dir></dir><dir name="PaymentExtApi"><dir name="Model"><dir name="Api2"><dir name="Payment"><dir name="Rest"><dir name="Admin"><file name="V1.php" hash="d172248ff949effa3990191c6a037ef3"/></dir></dir></dir><file name="Payment.php" hash="dd379bf5c286b0924111db0a8fadd658"/></dir></dir><dir name="etc"><file name="api2.xml" hash="792e6b7c9f17b551cb327267427ac128"/><file name="config.xml" hash="3a0e38693d058eb48521a4325b761b2e"/></dir></dir><dir name="SalesExtApi"><dir name="Model"><dir name="Api2"><dir name="Order"><dir name="Rest"><dir name="Admin"><file name="V1.php" hash="60d9b67908552ade74c89eb2a8d83493"/></dir></dir></dir></dir></dir><dir name="etc"><file name="api2.xml" hash="7fd3830df03511ab3fd8923e9bf490dc"/><file name="config.xml" hash="a0817be74340d9f9e12861993e5ee2c9"/></dir></dir><dir name="ShipmentExtApi"><dir name="Model"><dir name="Api2"><dir name="Shipment"><dir name="Rest"><dir name="Admin"><file name="V1.php" hash="3c0d3c01b64f83a2bbd0e443805e7506"/></dir></dir></dir><file name="Shipment.php" hash="8a804aecde89f00f4d013253e8526cfb"/></dir></dir><dir name="etc"><file name="api2.xml" hash="84d7bb1a150b5b94f0797403ef656f45"/><file name="config.xml" hash="6bcba4e8b893bb78eadfb6038fa01927"/></dir></dir><dir name="WebHooks"><dir name="Model"><file name="OrderObserver.php" hash="ca22f301af50c7986d8b1b96e8e4a8e5"/><file name="ProductObserver.php" hash="c6da509d06a30fb18f32b2004a1d8893"/><dir name="Resource"><file name="Setup.php" hash="428887c1ea6151a293d3d4b633963bce"/></dir></dir><dir name="etc"><file name="config.xml" hash="e5e8d6595e85311f3617f63b813e8e35"/><dir name="webapi"><file name="acl.xml" hash="444730c8892d9a14c169b6cd96da1cdd"/></dir></dir><dir name="sql"><dir name="shiphero_setup"><file name="install-0.1.0.php" hash="b793368264d3637cb831dd1ec2dbbeae"/></dir></dir></dir><file name=".DS_Store" hash="194577a7e20bdcc7afbb718f502c134c"/></dir></target><target name="mageetc"><dir name="modules"><file name="ShipHero.xml" hash="9ab0798e75362629478abe9a1db7bb6f"/></dir></target></contents>
+    <compatible/>
+    <dependencies><required><php><min>5.3.0</min><max>6.0.0</max></php><package><name>Mage_Core_Modules</name><channel>community</channel><min>1.7.0</min><max>2.0.0</max></package></required></dependencies>
+</package>

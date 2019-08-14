@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<config>
+    <api2>
+        <resources>
+            <shipmentextapi translate="title" module="ShipHero_ShipmentExtApi">
+                <group>catalogextapi</group>
+                <title>Shipment</title>
+                <model>shipmentextapi/api2_shipment</model>
+                <sort_order>10</sort_order>
+                <privileges>
+                    <admin>
+                        <create>1</create>
+                    </admin>
+                </privileges>
+                <attributes>
+                    <order_id>Order Id</order_id>
+                    <tracking_number>Tracking Number</tracking_number>
+                    <line_items>Line Items</line_items>
+                    <notify_customer>Notify Customer</notify_customer>
+                    <shipping_method>Shipping Method</shipping_method>
+                    <shipping_carrier>Shipping Carrier</shipping_carrier>
+                    <status>Status</status>
+                </attributes>
+                <routes>
+                    <route_collection>
+                        <route>/shiphero/shipment</route>
+                        <action_type>collection</action_type>
+                    </route_collection>
+                </routes>
+                <versions>1</versions>
+            </shipmentextapi>
+        </resources>
+    </api2>
+</config>

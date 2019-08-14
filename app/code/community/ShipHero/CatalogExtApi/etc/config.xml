@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <ShipHero_CatalogExtApi>
+            <version>0.1.0</version>
+        </ShipHero_CatalogExtApi>
+    </modules>
+    <global>
+        <models>
+            <catalogextapi>
+                <class>ShipHero_CatalogExtApi_Model</class>
+            </catalogextapi>
+        </models>
+    </global>
+</config>

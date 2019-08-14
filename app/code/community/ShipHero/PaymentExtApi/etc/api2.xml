@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<config>
+    <api2>
+        <resources>
+            <paymentextapi translate="title" module="ShipHero_PaymentExtApi">
+                <group>catalogextapi</group>
+                <title>Payment</title>
+                <model>paymentextapi/api2_payment</model>
+                <sort_order>10</sort_order>
+                <privileges>
+                    <admin>
+                        <create>1</create>
+                    </admin>
+                </privileges>
+                <attributes>
+                    <order_id>Order Id</order_id>
+                    <line_items>Line Items</line_items>
+                    <status>Status</status>
+                </attributes>
+                <routes>
+                    <route_collection>
+                        <route>/shiphero/payment</route>
+                        <action_type>collection</action_type>
+                    </route_collection>
+                </routes>
+                <versions>1</versions>
+            </paymentextapi>
+        </resources>
+    </api2>
+</config>

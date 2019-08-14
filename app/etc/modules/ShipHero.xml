@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <ShipHero_CatalogExtApi>
+            <active>true</active>
+            <codePool>community</codePool>
+        </ShipHero_CatalogExtApi>
+        <ShipHero_SalesExtApi>
+            <active>true</active>
+            <codePool>community</codePool>
+        </ShipHero_SalesExtApi>
+        <ShipHero_ShipmentExtApi>
+            <active>true</active>
+            <codePool>community</codePool>
+        </ShipHero_ShipmentExtApi>
+        <ShipHero_PaymentExtApi>
+            <active>true</active>
+            <codePool>community</codePool>
+        </ShipHero_PaymentExtApi>
+        <ShipHero_WebHooks>
+            <active>true</active>
+            <codePool>community</codePool>
+        </ShipHero_WebHooks>
+    </modules>
+</config>

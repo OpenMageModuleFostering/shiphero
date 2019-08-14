@@ -1,0 +1,16 @@
+{
+    "name": "OpenMageModuleFostering/ShipHero",
+    "type": "magento-module",
+    "license": "GNU-General-Public-License-(GPL)",
+    "homepage": "",
+    "description": "Beautiful and powerful warehouse management system using iPads and iPods to ship orders and manage inventory.",
+    "authors": [
+    {
+        "name": "Fareed Hosein",
+        "email": "roger@shiphero.com"
+    }
+],
+    "suggest": {
+        "magento-hackathon/magento-composer-installer": "*"
+    }
+}

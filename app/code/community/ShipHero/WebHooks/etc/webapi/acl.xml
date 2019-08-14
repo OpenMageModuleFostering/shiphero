@@ -1,0 +1,35 @@
+<config>
+    <acl>
+        <resources>
+            <resource id="Magento_Webapi">
+                <resource id="product" title="Manage Products" module="Magento_Product">
+                    <resource id="product/create" title="Create" sortOrder="10" />
+                    <resource id="product/get" title="Retrieve" sortOrder="20" />
+                    <resource id="product/update" title="Update" sortOrder="30" />
+                    <resource id="product/delete" title="Delete" sortOrder="40" />
+                </resource>
+                <resource id="order" title="Manage Orders" module="Magento_Order">
+                    <resource id="order/create" title="Create" sortOrder="10" />
+                    <resource id="order/get" title="Retrieve" sortOrder="20" />
+                    <resource id="order/update" title="Update" sortOrder="30" />
+                    <resource id="order/delete" title="Delete" sortOrder="40" />
+                </resource>
+            </resource>
+        </resources>
+    </acl>
+    <mapping>
+        <!-- Products -->
+        <resource id="product/list" parent="product/get" />
+        <!-- webhooks -->
+        <resource id="product/updated" parent="product/get"/>
+        <resource id="product/created" parent="product/get"/>
+        <resource id="product/deleted" parent="product/get"/>
+
+        <!-- Orders -->
+        <resource id="order/list" parent="order/get" />
+        <!-- webhooks -->
+        <resource id="order/updated" parent="order/get"/>
+        <resource id="order/created" parent="order/get"/>
+        <resource id="order/deleted" parent="order/get"/>
+    </mapping>
+</config>

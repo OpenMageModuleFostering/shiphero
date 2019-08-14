@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <ShipHero_PaymentExtApi>
+            <version>0.1.0</version>
+        </ShipHero_PaymentExtApi>
+    </modules>
+    <global>
+        <models>
+            <paymentextapi>
+                <class>ShipHero_PaymentExtApi_Model</class>
+            </paymentextapi>
+        </models>
+    </global>
+</config>

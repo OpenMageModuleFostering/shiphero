@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<config>
+    <api2>
+        <resource_groups>
+            <catalogextapi translate="title" module="ShipHero_CatalogEXtApi">
+                <title>ShipHero</title>
+                <sort_order>10</sort_order>
+            </catalogextapi>
+        </resource_groups>
+        <resources>
+            <catalogextapi translate="title" module="ShipHero_CatalogEXtApi">
+                <group>catalogextapi</group>
+                <title>Product</title>
+                <sort_order>10</sort_order>
+                <model>catalogextapi/api2_product</model>
+                <privileges>
+                    <admin>
+                        <create>1</create>
+                        <retrieve>1</retrieve>
+                        <update>1</update>
+                        <delete>1</delete>
+                    </admin>
+                </privileges>
+                <attributes>
+                    <adjusted_name>Adjusted Name</adjusted_name>
+                    <images>Images</images>
+                    <stock>Inventory</stock>
+                    <attributes>Attributes</attributes>
+                    <catalog_size>Catalog Size</catalog_size>
+                    <attribute_sets>Attribute Sets</attribute_sets>
+                    <components>Components</components>
+                    <attribute_set_id>Attribute Set Id</attribute_set_id>
+                    <entity_id>Entity Id</entity_id>
+                </attributes>
+                <routes>
+                    <route_entity>
+                        <route>/shiphero/products/count</route>
+                        <action_type>entity</action_type>
+                    </route_entity>
+                    <route_entity>
+                        <route>/shiphero/products/:id</route>
+                        <action_type>entity</action_type>
+                    </route_entity>
+                    <route_collection>
+                        <route>/shiphero/products</route>
+                        <action_type>collection</action_type>
+                    </route_collection>
+                </routes>
+                <versions>1</versions>
+            </catalogextapi>
+        </resources>
+    </api2>
+</config>

@@ -1,0 +1,87 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <ShipHero_WebHooks>
+            <version>0.1.0</version>
+        </ShipHero_WebHooks>
+    </modules>
+    <global>
+        <resources>
+            <shiphero_setup>
+                <setup>
+                    <module>ShipHero_WebHooks</module>
+                    <class>ShipHero_WebHooks_Model_Resource_Setup</class>
+                </setup>
+            </shiphero_setup>
+        </resources>
+        <models>
+            <shiphero_webhooks>
+                <class>ShipHero_WebHooks_Model</class>
+            </shiphero_webhooks>
+        </models>
+        <events>
+            <sales_order_save_before>
+                <observers>
+                    <shiphero_order_before_webhook>
+                        <class>shiphero_webhooks/OrderObserver</class>
+                        <method>orderSaveBefore</method>
+                        <type>singleton</type>
+                    </shiphero_order_before_webhook>
+                </observers>
+            </sales_order_save_before>
+            <sales_order_save_after>
+                <observers>
+                    <shiphero_order_after_webhook>
+                        <class>shiphero_webhooks/OrderObserver</class>
+                        <method>orderSaveAfter</method>
+                        <type>singleton</type>
+                    </shiphero_order_after_webhook>
+                </observers>
+            </sales_order_save_after>
+            <catalog_product_save_after>
+                <observers>
+                    <shiphero_product_webhook>
+                        <class>shiphero_webhooks/ProductObserver</class>
+                        <method>productSaveAfter</method>
+                        <type>singleton</type>
+                    </shiphero_product_webhook>
+                </observers>
+            </catalog_product_save_after>
+            <catalog_product_delete_after>
+                <observers>
+                    <shiphero_product_delete_webhook>
+                        <class>shiphero_webhooks/ProductObserver</class>
+                        <method>productDelete</method>
+                        <type>singleton</type>
+                    </shiphero_product_delete_webhook>
+                </observers>
+            </catalog_product_delete_after>
+        </events>
+        <webhook>
+            <webhooks>
+                <product>
+                    <created>
+                        <label>Product Created</label>
+                    </created>
+                    <updated>
+                        <label>Product Updated</label>
+                    </updated>
+                    <deleted>
+                        <label>Product Deleted</label>
+                    </deleted>
+                </product>
+                <order>
+                    <created>
+                        <label>Order Created</label>
+                    </created>
+                    <updated>
+                        <label>Order Updated</label>
+                    </updated>
+                    <deleted>
+                        <label>Order Deleted</label>
+                    </deleted>
+                </order>
+            </webhooks>
+        </webhook>
+    </global>
+</config>
