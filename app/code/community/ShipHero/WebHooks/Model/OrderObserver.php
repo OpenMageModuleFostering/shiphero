@@ -3,6 +3,7 @@
 class ShipHero_WebHooks_Model_OrderObserver
 {
     protected $url = 'http://api.shiphe.ro/api/api2/magento/webhooks/';
+    protected $attribute_output = array();
 
     /**
      * Constructor
@@ -77,15 +78,54 @@ class ShipHero_WebHooks_Model_OrderObserver
         }
 
         $orderItems = array();
+
         foreach($items as $item)
         {
-            $product = Mage::getModel('catalog/product')->load($item['product_id']);
-            $p_name = $this->_getProductName($product);
+            $this->attribute_output = array();
+            $product = Mage::getModel('catalog/product');
+            $product->load($item['product_id']);
             $productData = $item->getProduct()->getData();
+            $options = $item->getProductOptions();
+
+            if($product->getTypeID() == 'configurable')
+            {
+                $productOptions = $item->getData();
+                $simpleProduct = unserialize($productOptions['product_options']);
+
+                // Loop through our options for the ordered item
+                if(!empty($simpleProduct))
+                {
+                    foreach ($simpleProduct['options'] as $key => $itemOption)
+                    {
+                        // Get product options
+                        foreach ($product->getOptions() as $opt)
+                        {
+                            // Get the values for the options
+                            $opts = $opt->getValues();
+
+                            // Loop through options and extract the values for the selected item's options
+                            foreach ($opts as $o)
+                            {
+                                $oData = $o->getData();
+                                if ($itemOption['option_id'] == $oData['option_id'] && $itemOption['print_value'] == $oData['default_title'])
+                                {
+                                    $simpleProduct['options'][$key]['sku'] = $oData['sku'];
+                                    $simpleProduct['options'][$key]['price'] = $oData['price'];
+                                }
+                            }
+                        }
+                    }
+
+                    $product['name'] = $simpleProduct['simple_name'];
+                    $productData['sku'] = $simpleProduct['simple_sku'];
+                    $product->load($product->getIdBySku($simpleProduct['simple_sku']));
+                    $options['options'] = $simpleProduct['options'];
+                }
+            }
+            $p_name = $this->_getProductName($product);
             $item['sku'] = $productData['sku'];
             $customOptions = array();
 
-            $options = $item->getProductOptions();
             if(!empty($options['options']))
             {
                 $customOptions = $options['options'];
@@ -99,7 +139,8 @@ class ShipHero_WebHooks_Model_OrderObserver
                 'adjusted_name' => $p_name,
                 'qty_shipped' => $item['qty_shipped'],
                 'type_id' => $product->getTypeID(),
-                'custom_options' => $customOptions
+                'custom_options' => $customOptions,
+                'attributes' => $this->attribute_output
             );
         }
 
@@ -128,7 +169,7 @@ class ShipHero_WebHooks_Model_OrderObserver
             'created_at' => $order['created_at'],
             'is_update' => $updating
         );
-
+        
         $url = $this->url . 'ordercreation/';
         $request = $this->_sendData($url, $fields);
     }
@@ -170,7 +211,6 @@ class ShipHero_WebHooks_Model_OrderObserver
     private function _sendData($url, $fields = array())
     {
         $content = json_encode($fields);
-
         $curl = curl_init($url);
         curl_setopt($curl, CURLOPT_HEADER, false);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
@@ -217,11 +257,15 @@ class ShipHero_WebHooks_Model_OrderObserver
         $p = $product->debug();
         foreach($p as $key => $val)
         {
-            if(in_array($key, $allAttributecodes) && ($key == 'color' || $key == 'size'))
+            if(in_array($key, $allAttributecodes))
             {
                 $attribute_value = $product->getAttributeText($key);
                 if(!empty($attribute_value))
-                    $p_name .= ' / ' . $attribute_value;
+                {
+                    $this->attribute_output[] = array('label' => $key, 'value' => $attribute_value);
+                    if($key == 'color' || $key == 'size')
+                        $p_name .= ' / ' . $attribute_value;
+                }
             }
         }
         return $p_name;

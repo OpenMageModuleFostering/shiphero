@@ -26,6 +26,7 @@
                     <images>Images</images>
                     <stock>Inventory</stock>
                     <attributes>Attributes</attributes>
+                    <custom_options>Custom Options</custom_options>
                     <catalog_size>Catalog Size</catalog_size>
                     <attribute_sets>Attribute Sets</attribute_sets>
                     <components>Components</components>

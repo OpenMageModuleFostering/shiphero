@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<config>
+    <api2>
+        <resources>
+            <categoriesextapi translate="title" module="ShipHero_CategoriesEXtApi">
+                <group>catalogextapi</group>
+                <title>Categories</title>
+                <model>categoriesextapi/api2_categories</model>
+                <sort_order>10</sort_order>
+                <privileges>
+                    <admin>
+                        <retrieve>1</retrieve>
+                    </admin>
+                </privileges>
+                <attributes>
+                    <category_id>Category ID</category_id>
+                    <name>Name</name>
+                    <parent_id>Category Parent ID</parent_id>
+                    <child_id>Category Child List</child_id>
+                    <active>Active</active>
+                    <level>Level</level>
+                    <position>Position</position>
+                    <label>Label</label>
+                    <value>Value</value>
+                </attributes>
+                <routes>
+                    <route_collection>
+                        <route>/shiphero/categories</route>
+                        <action_type>collection</action_type>
+                    </route_collection>
+                </routes>
+                <versions>1</versions>
+            </categoriesextapi>
+        </resources>
+    </api2>
+</config>

@@ -17,6 +17,10 @@
             <active>true</active>
             <codePool>community</codePool>
         </ShipHero_PaymentExtApi>
+        <ShipHero_CategoriesExtApi>
+            <active>true</active>
+            <codePool>community</codePool>
+        </ShipHero_CategoriesExtApi>
         <ShipHero_WebHooks>
             <active>true</active>
             <codePool>community</codePool>

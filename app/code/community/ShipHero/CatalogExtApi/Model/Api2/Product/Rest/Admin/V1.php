@@ -77,6 +77,7 @@ class ShipHero_CatalogExtApi_Model_Api2_Product_Rest_Admin_V1 extends Mage_Catal
             $images = array();
             $product = Mage::getModel('catalog/product')->load($p['entity_id']);
             $product_attributes = array();
+            $custom_options = array();
 
             $p_name = $p['name'];
             foreach($allFrontendAttributeCodes as $a)
@@ -105,8 +106,45 @@ class ShipHero_CatalogExtApi_Model_Api2_Product_Rest_Admin_V1 extends Mage_Catal
                     $product_attributes[] = array($b => $attribute_value);
                 }
             }
-            
-            $stock = $product['stock_item']->getData();
+
+            foreach($product->getOptions() as $o)
+            {
+                $values = $o->getValues();
+                $typeData = $o->getData();
+                $label = $typeData['title'];
+                foreach($values as $key => $val)
+                {
+                    $v = $val->getData();
+                    $custom_options[] = array(
+                        'label' => $label,
+                        'value' => $v['title'],
+                        'sku' => $v['sku'],
+                        'price' => $v['price']
+                    );
+                }
+            }
+
+            // Check if Advanced Stock Module is installed so we can pull stock from all warehouses
+            $stock = array();
+            $modules = Mage::getConfig()->getNode('modules')->children();
+            $modulesArray = (array)$modules;
+
+            if(isset($modulesArray['MDN_AdvancedStock'])) {
+                $collection = Mage::getModel('cataloginventory/stock_item')
+                    ->getCollection()
+                    ->join('AdvancedStock/Warehouse', 'main_table.stock_id=`AdvancedStock/Warehouse`.stock_id')
+                    ->addFieldToFilter('product_id', $p['entity_id']);
+
+                $stock = $collection->getData();
+            } elseif(isset($modulesArray['Innoexts_Warehouse'])) {
+                $collection = Mage::getModel('cataloginventory/stock_item')
+                    ->getCollection()
+                    ->addFieldToFilter('product_id', $p['entity_id']);
+
+                $stock = $collection->getData();
+            } else {
+                $stock = $product['stock_item']->getData();
+            }
 
             foreach ($product->getMediaGalleryImages() as $image) {
                 $images[] = array('url' => $image->getUrl(), 'position' => $image->getPosition());
@@ -129,6 +167,7 @@ class ShipHero_CatalogExtApi_Model_Api2_Product_Rest_Admin_V1 extends Mage_Catal
             $products[$k]['images'] = $images;
             $products[$k]['stock'] = $stock;
             $products[$k]['attributes'] = $product_attributes;
+            $products[$k]['custom_options'] = $custom_options;
             $products[$k]['catalog_size'] = $total_products;
         }
 

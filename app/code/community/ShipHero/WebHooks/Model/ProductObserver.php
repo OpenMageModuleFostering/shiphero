@@ -73,6 +73,39 @@ class ShipHero_WebHooks_Model_ProductObserver
         // Retrieve the product being updated from the event observer
         $stock = $stock = Mage::getModel('cataloginventory/stock_item')->loadByProduct($product["entity_id"])->getData();
 
+        // Check if Advanced Stock Module is installed so we can pull stock from all warehouses
+        $stockData = array();
+        $modules = Mage::getConfig()->getNode('modules')->children();
+        $modulesArray = (array)$modules;
+        if(isset($modulesArray['MDN_AdvancedStock'])) {
+            $collection = Mage::getModel('cataloginventory/stock_item')
+                ->getCollection()
+                ->join('AdvancedStock/Warehouse', 'main_table.stock_id=`AdvancedStock/Warehouse`.stock_id')
+                ->addFieldToFilter('product_id', $product["entity_id"]);
+
+            $stocks = $collection->getData();
+            foreach($stocks as $s){
+                $stockData[] = array(
+                    'quantity' => $s['qty'],
+                    'stock_item_id' => $s['item_id'],
+                    'stock_id' => $s['stock_id']
+                );
+            }
+        } elseif(isset($modulesArray['Innoexts_Warehouse'])) {
+            $collection = Mage::getModel('cataloginventory/stock_item')
+                ->getCollection()
+                ->addFieldToFilter('product_id', $product["entity_id"]);
+
+            $stocks = $collection->getData();
+            foreach($stocks as $s){
+                $stockData[] = array(
+                    'quantity' => $s['qty'],
+                    'stock_item_id' => $s['item_id'],
+                    'stock_id' => $s['stock_id']
+                );
+            }
+        }
+
         $images = array();
         foreach($product->getMediaGalleryImages() as $image) 
         {
@@ -106,7 +139,9 @@ class ShipHero_WebHooks_Model_ProductObserver
             "price" => $product["price"],
             "status" => $product["status"],
             "quantity" => $stock['qty'],
+            "stock_id" => $stock['stock_id'],
             "stock_item_id" => $stock_item_id,
+            "multi_stock_data" => $stockData,
             "store_id" => $store_id, 
             "images" => $images,
             "attributes" => $this->attributes,

@@ -38,6 +38,8 @@ class ShipHero_ShipmentExtApi_Model_Api2_Shipment_Rest_Admin_V1 extends ShipHero
      */
     protected function _create(array $data)
     {
+        // error_log("In create shipment");
+        // error_log(print_r($data,1));
         if(empty($data['order_id']))
         {
             $this->_critical(self::RESOURCE_REQUEST_DATA_INVALID);
@@ -53,7 +55,7 @@ class ShipHero_ShipmentExtApi_Model_Api2_Shipment_Rest_Admin_V1 extends ShipHero
          * which will be sent out by any warehouse to Magento
          */
         $shipmentTrackingNumber = $data['tracking_number'];
-     
+
         /**
          * This can be blank also.
          */
@@ -63,36 +65,54 @@ class ShipHero_ShipmentExtApi_Model_Api2_Shipment_Rest_Admin_V1 extends ShipHero
                 // $shipment = Mage::getModel('sales/service_order', $order)
                 //                 ->prepareShipment($this->_getItemQtys($order, $data['line_items']));
                 $shipment = Mage::getModel('sales/service_order', $order)
-                                ->prepareShipment($this->_getItemQtys($order, $data['line_items']));
-     
+                    ->prepareShipment($this->_getItemQtys($order, $data['line_items']));
+
                 /**
                  * Carrier Codes can be like "ups" / "fedex" / "custom",
                  * but they need to be active from the System Configuration area.
                  * These variables can be provided custom-value, but it is always
                  * suggested to use Order values
                  */
+                $originalCarrierCode = strtolower($order->getShippingCarrier()->getCarrierCode());
+                $originalCarrierTitle = $order->getShippingCarrier()->getConfigData('title');
                 $shipmentCarrierCode = $data['shipping_carrier'];
-                $shipmentCarrierTitle = NULL; // $data['shipping_method'];
-     
+                $shipmentCarrierTitle = $data['shipping_method'];
+
+                if(!empty($shipmentCarrierCode))
+                {
+                    $customerEmailComments = 'Shipped via ' . $shipmentCarrierCode;
+                }
+                else
+                {
+                    $shipmentCarrierCode = $originalCarrierCode;
+                }
+
+                if(empty($shipmentCarrierTitle))
+                {
+                    $shipmentCarrierTitle = $originalCarrierTitle;
+                }
+
                 $arrTracking = array(
-                    'carrier_code' => isset($shipmentCarrierCode) ? $shipmentCarrierCode : $order->getShippingCarrier()->getCarrierCode(),
-                    'title' => isset($shipmentCarrierTitle) ? $shipmentCarrierTitle : $order->getShippingCarrier()->getConfigData('title'),
+                    'carrier_code' => $shipmentCarrierCode,
+                    'title' => $shipmentCarrierTitle,
                     'number' => $shipmentTrackingNumber,
                 );
 
                 $track = Mage::getModel('sales/order_shipment_track')->addData($arrTracking);
                 $shipment->addTrack($track);
-     
+
                 // Register Shipment
                 $shipment->register();
-     
+
                 // Save the Shipment
                 $this->_saveShipment($shipment, $order, $customerEmailComments);
-     
+
                 // Finally, Save the Order
                 $this->_saveOrder($order, $customerEmailComments);
 
             } catch (Exception $e) {
+                // error_log("Top level error");
+                // error_log($e->getMessage());
                 $this->_error($e->getMessage(), Mage_Api2_Model_Server::HTTP_BAD_REQUEST);
             }
         }
@@ -124,7 +144,7 @@ class ShipHero_ShipmentExtApi_Model_Api2_Shipment_Rest_Admin_V1 extends ShipHero
     protected function _getItemQtys(Mage_Sales_Model_Order $order, $lineItems)
     {
         $qty = array();
-        
+
         foreach ($order->getAllItems() as $_eachItem) {
             $orderQty = (int)$_eachItem->getQtyOrdered();
             $shippedQty = (int)$_eachItem->getQtyShipped();
@@ -143,7 +163,7 @@ class ShipHero_ShipmentExtApi_Model_Api2_Shipment_Rest_Admin_V1 extends ShipHero
 
         return $qty;
     }
-     
+
     /**
      * Saves the Shipment changes in the Order
      *
@@ -155,19 +175,26 @@ class ShipHero_ShipmentExtApi_Model_Api2_Shipment_Rest_Admin_V1 extends ShipHero
     {
         $shipment->getOrder()->setIsInProcess(true);
         $transactionSave = Mage::getModel('core/resource_transaction')
-                               ->addObject($shipment)
-                               ->addObject($order)
-                               ->save();
-     
+            ->addObject($shipment)
+            ->addObject($order)
+            ->save();
+
         $emailSentStatus = $shipment->getData('email_sent');
+        // error_log('Email Check');
+        // error_log($customerEmailComments . ', ' . $emailSentStatus);
         if (!is_null($customerEmailComments) && !$emailSentStatus) {
-            $shipment->sendEmail(true, $customerEmailComments);
+            try {
+                $emailed = $shipment->sendEmail(true, $customerEmailComments);
+            }catch (Exception $e){
+                error_log("Email Error");
+                error_log($e->getMessage());
+            }
             $shipment->setEmailSent(true);
         }
-     
+
         return $this;
     }
-     
+
     /**
      * Saves the Order, to complete the full life-cycle of the Order
      * Order status will now show as Complete
@@ -182,10 +209,10 @@ class ShipHero_ShipmentExtApi_Model_Api2_Shipment_Rest_Admin_V1 extends ShipHero
         }
         // $order->setData('state', Mage_Sales_Model_Order::STATE_PROCESSING);
         // $order->setData('status', Mage_Sales_Model_Order::STATE_PROCESSING);
-     
+
         $order->save();
-     
+
         return $this;
     }
-    
+
 }
